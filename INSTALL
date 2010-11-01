@@ -1,8 +1,8 @@
 cd to your django project directory
 
-$ git clone git@github.com:thunderrabbit/Mathoholic-Cheater.git mathocheater
+$ git clone git@github.com:thunderrabbit/mathocheater.git
 
-add 'mathocheater' to your list of INSTALLED_APPS in settings.py
+add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
 
 $ python manage.py sql mathocheater
 
