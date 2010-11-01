@@ -50,7 +50,7 @@ class Digits (models.Model):
         if(finished):
             answer = self.answers_set.create(solution = result_string)
         else:
-            answer = self.answers_set.create(solution = str(self.d1) + " ? " + str(self.d2) + " ? " + str(self.d3) + " ? " + str(self.d4))
+            answer = self.answers_set.create(solution = 'none')
         return answer
 
     def set_parenthesis(self, p_option):
