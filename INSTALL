@@ -1,9 +1,21 @@
+install django   http://docs.djangoproject.com/en/dev/intro/install/
+
 cd to your django project directory
 
-$ git clone git@github.com:thunderrabbit/mathocheater.git
+	$ cd /full/path/to/yourproject
 
-add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
+make a clone of the mathocheater repository
 
-$ python manage.py sql mathocheater
+	$ git clone git@github.com:thunderrabbit/mathocheater.git
 
-$ python manage.py syncdb
+add 'yourproject.mathocheater' to your list of INSTALLED_APPS in settings.py
+
+tell django to set up DB tables for mathocheater
+
+	$ python manage.py sql mathocheater
+	$ python manage.py syncdb
+
+edit your project urls.py file to point to mathocheater.urls file
+
+    (r'^', include('yourproject.mathocheater.urls')),
+
