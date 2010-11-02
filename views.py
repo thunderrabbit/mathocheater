@@ -8,7 +8,7 @@ def index(request):
     return render_to_response('index.html', {'form':form})
 
 def solve(request, d1, d2, d3, d4):
-    form = DigitsForm({'digits':934})
+    form = DigitsForm({'digits':d1+d2+d3+d4})
     if(form.is_valid()):
         answer = Answers.objects.filter(digits__d1__exact=d1,digits__d2__exact=d2,digits__d3__exact=d3,digits__d4__exact=d4).values('solution')
         if(answer):
