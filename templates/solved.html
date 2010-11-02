@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Mathoholic Cheater - Welcome{% endblock %}
+{% block title %}Mathoholic Solver - solution{% endblock %}
 
 {% block content %}
     {% if form.errors %}
@@ -8,6 +8,6 @@
             Please correct the error{{ form.errors|pluralize }} below.
         </p>
     {% else %}
-        <p style="color: blue;">{{ answer }}</p>
+        <p style="color: blue;">{{ solution }}</p>
     {% endif %}
 {% endblock %}

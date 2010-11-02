@@ -1,32 +1,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-    <title>{% block title %}Mathoholic Cheater{% endblock %}</title>
-<script type="text/javascript">
-  
-  function myCallBack(param){
-        location.replace('/'+param);
-	alert('done');
-  }
-</script>
+    <title>{% block title %}Mathoholic Solver{% endblock %}</title>
 </head>
-<body onload="document.getElementById('four_digits').focus();">
-    <h2>Mathocheater</h2>
+<body  onload="document.getElementById('id_digits').focus();">
+
+    {% block menu %}
+    <p><a href="/">home</a></p>
+    {% endblock %}
+    <h2>Mathoholic Solver</h2>
     {% block content %}{% endblock %}
 
-{% block form %}
+    {% block form %}
+    <p>Type four digits into the field below and press enter:</p>
+    <form id="four_digit_form" action="/">
+    {{ form.as_p }}
+    </form>
 
-<p>Type four digits into the field below and press enter:</p>
-
-<form id="four_digit_form" onsubmit=myCallBack(document.getElementById('four_digits').value)>
-<input id="four_digits" type="text">
-</form>
-{% endblock %}
+    {% endblock %}
     {% block footer %}
     <hr>
     <p>This site is neither affiliated with nor condoned by <a href="http://www.denaglobal.com/">DeNA Global, Inc</a>, the seller of Mathoholic.</p>
 
-    <p>This site runs on Django, and is available on GitHub: <a href="http://github.com/thunderrabbit/mathocheater">Mathocheater site source code</a></p>
+    <p>This site runs on Django, and is available on GitHub: <a href="http://github.com/thunderrabbit/mathocheater">Mathoholic Solver site source code</a></p>
     {% endblock %}
 </body>
 </html>
