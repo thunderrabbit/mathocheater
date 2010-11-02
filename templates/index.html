@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}The current time{% endblock %}
+{% block title %}Mathoholic Cheater - Welcome{% endblock %}
 
 {% block content %}
-<p>It is now {{ current_date }}.</p>
+<p>A simple game for iPhone, Mathoholic tests one's skills in arithmetic.  In just 30 seconds, figure out how to combine four integers to make the final answer of 10.</p>
+
+<p>You can <a href="http://itunes.apple.com/us/app/mathoholic/id333577664?mt=8">download Mathoholic</a>, but can you solve the equations?</p>
+
+<p>They can be tricky, and sometimes seem impossible... AND if you can't solve it, the answer isn't provided!!!  Oh noooess!!</p>
+
+<p>So I wrote this little Mathoholic cheater.</p>
+
+<p>Type four digits into the form below and press enter:</p>
+
+<form action="/">
+{{ form.as_p }}
+</form>
 {% endblock %}
