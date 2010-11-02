@@ -1,25 +1,28 @@
-install django   http://docs.djangoproject.com/en/dev/intro/install/
+(*) install django        http://docs.djangoproject.com/en/dev/intro/install/
 
-start a new project   http://docs.djangoproject.com/en/dev/intro/tutorial01/
+(*) start a new project   http://docs.djangoproject.com/en/dev/intro/tutorial01/
 
         $ django-admin.py startproject mathoholic
 
-cd to your django project directory
+(*) cd to your django project directory
 
-	$ cd /full/path/to/mathoholic
+	$ cd mathoholic
 
-make a clone of the mathocheater repository
+(*) make a clone of the mathocheater repository
 
 	$ git clone git@github.com:thunderrabbit/mathocheater.git
 
-add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
+(*) add database connection info to DATABASES in settings.py
 
-tell django to set up DB tables for mathocheater
+(*) add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
+
+(*) tell django to set up DB tables for mathocheater
 
 	$ python manage.py sql mathocheater
 	$ python manage.py syncdb
 
-edit your project urls.py file to point to mathocheater.urls file
+(*) edit mathoholic/urls.py file to point to mathocheater.urls file
 
-    (r'^', include('yourproject.mathocheater.urls')),
+        (r'^', include('mathoholic.mathocheater.urls')),
 
+(*) if all is working, set DEBUG = False in settings.py
