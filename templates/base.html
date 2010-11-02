@@ -2,10 +2,26 @@
 <html lang="en">
 <head>
     <title>{% block title %}Mathoholic Cheater{% endblock %}</title>
+<script type="text/javascript">
+  
+  function myCallBack(param){
+        location.replace('/'+param);
+	alert('done');
+  }
+</script>
 </head>
-<body>
+<body onload="document.getElementById('four_digits').focus();">
     <h2>Mathocheater</h2>
     {% block content %}{% endblock %}
+
+{% block form %}
+
+<p>Type four digits into the field below and press enter:</p>
+
+<form id="four_digit_form" onsubmit=myCallBack(document.getElementById('four_digits').value)>
+<input id="four_digits" type="text">
+</form>
+{% endblock %}
     {% block footer %}
     <hr>
     <p>This site is neither affiliated with nor condoned by <a href="http://www.denaglobal.com/">DeNA Global, Inc</a>, the seller of Mathoholic.</p>
