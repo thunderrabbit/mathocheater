@@ -1,14 +1,18 @@
 install django   http://docs.djangoproject.com/en/dev/intro/install/
 
+start a new project   http://docs.djangoproject.com/en/dev/intro/tutorial01/
+
+        $ django-admin.py startproject mathoholic
+
 cd to your django project directory
 
-	$ cd /full/path/to/yourproject
+	$ cd /full/path/to/mathoholic
 
 make a clone of the mathocheater repository
 
 	$ git clone git@github.com:thunderrabbit/mathocheater.git
 
-add 'yourproject.mathocheater' to your list of INSTALLED_APPS in settings.py
+add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
 
 tell django to set up DB tables for mathocheater
 
