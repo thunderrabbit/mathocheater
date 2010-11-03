@@ -67,7 +67,7 @@ class Digits (models.Model):
         #------------------------------------------------------------#
         #
         #  here we need to see if the counter needs to be updated
-        #  I'm thinking of it's same IP address during same hour,
+        #  I'm thinking if it's the same IP address during the same hour,
         #  do *not* count it.
         #  
         #------------------------------------------------------------#

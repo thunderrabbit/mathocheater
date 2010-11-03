@@ -1,8 +1,13 @@
 (*) install django        http://docs.djangoproject.com/en/dev/intro/install/
-
 (*) start a new project   http://docs.djangoproject.com/en/dev/intro/tutorial01/
 
         $ django-admin.py startproject mathoholic
+
+((
+    On Dreamhost, django install and project setup are done this way: 
+	$ wget http://wiki.dreamhost.com/django-setup.py
+	$ python django-setup.py
+))
 
 (*) cd to your django project directory
 
@@ -12,7 +17,7 @@
 
 	$ git clone git@github.com:thunderrabbit/mathocheater.git
 
-(*) add database connection info to DATABASES in settings.py
+(*) add database connection info to DATABASES in settings.py  (this is already done if on Dreamhost)
 
 (*) add 'mathoholic.mathocheater' to your list of INSTALLED_APPS in settings.py
 
