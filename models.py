@@ -119,3 +119,17 @@ class Answers (models.Model):
         except:
             response = "no solution found"
         return response
+
+class Statistics (models.Model):
+    """ stores unique hits for Digits
+    The query is considered unique if:
+    
+    different Digits     OR
+    different IP address OR
+    different day"""
+
+    digits = models.ForeignKey(Digits)
+    IP = models.CharField(max_length=40)
+    created_on = models.DateField(auto_now = False, auto_now_add = True)
+    updated_on = models.DateField(auto_now = True, auto_now_add = False)
+
