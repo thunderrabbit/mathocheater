@@ -41,3 +41,6 @@ def index(request):
         return render_to_response(template_name, {'form':empty_form})
 
 
+def statistics(request):
+    return render_to_response("statistics.html")
+    
