@@ -23,7 +23,7 @@ def index(request):
 
             answer = Answers.objects.filter(digits__d1__exact=d1,digits__d2__exact=d2,digits__d3__exact=d3,digits__d4__exact=d4).values('solution','digits_id')
             if(answer):
-                solution = answer[0]['solution']  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax
+                solution = answer[0]['solution']  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax  (2 November 2010)
                 digits_id = answer[0]['digits_id']  # will be used to pull statistics item
 
                 # begin code that updates counter for this already-saved Digits item
@@ -51,5 +51,6 @@ def index(request):
 
 
 def statistics(request):
-    return render_to_response("statistics.html")
+    answers = Answers.objects.all().order_by('-digits__counter')
+    return render_to_response("statistics.html",{'answers':answers})
     

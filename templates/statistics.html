@@ -3,7 +3,11 @@
 {% block title %}Mathoholic Solver - statistics{% endblock %}
 
 {% block content %}
-        <p style="color: blue;">stats go here</p>
+<table>
+{% for answer in answers %}
+        <tr><td style="color: blue;">{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
+{% endfor %}
+</table>
 {% endblock %}
 
 {% block form %}{% endblock %}
