@@ -64,14 +64,8 @@ class Digits (models.Model):
             if(finished):
                 break
 
-        #-----------------------------------------------------------------#
-        #
-        #  here we need to see if the counter needs to be updated
-        #  I'm thinking if it's the same IP address during the same hour,
-        #  do *not* count it.
-        #
-        #-----------------------------------------------------------------#
         self.save()
+        self.log()
         if(finished):
             answer = self.answers_set.create(solution = result_string)
         else:
@@ -80,17 +74,15 @@ class Digits (models.Model):
 
     def log(self):
 
-        # begin code that updates counter for this already-saved Digits item
-        statistic = Statistics.objects.filter(digits=self.id)
+        ''' creates statistic item and  updates counter '''
+        #  I'm thinking if it's the same IP address during the same date,
+        #  do *not* count it.
+        statistic = Statistics.objects.filter(digits=self.id)    # should filter on IP address and date as well
         if(statistic):
-            statistic.counter += 1
-            statistic.save()
+            statistic[0].counter += 1    # this is counted as a reloaded item (ballot stuffing)
+            statistic[0].save()
         else:
-##  these aren't working, and I don't know why            
-##            ORMme = Digits.objects.get(id=self.id)
-            
-#            self.statistics_set.create(digits_id=self.id,IP='dog',counter=1)  # why do we need to specify digits_id ???  shouldn't the ORM know??
-##            ORMme.statistics_set.create(IP='dog',counter=1)  # why do we need to specify digits_id ???  shouldn't the ORM know??
+            self.statistics_set.create(IP='dog',counter=1)  #  need to store the IP address
             self.counter += 1
             self.save()
 

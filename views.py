@@ -27,12 +27,11 @@ def index(request):
                 digits_id = answer[0]['digits_id']  # will be used to pull statistics item
 
                 update_digits_count = Digits.objects.get(id=digits_id)
-                update_digits_count.log()
+                update_digits_count.log()           # we didn't run solve() so must specifically log the request for these digits
                 
             else:
                 digits = Digits(d1 = d1, d2 = d2, d3=d3, d4=d4, counter=0)
-                digits.log()
-                answer = digits.solve()
+                answer = digits.solve()             # will log the request as well
                 solution = answer.solution
 
             if(solution != 'none'):
