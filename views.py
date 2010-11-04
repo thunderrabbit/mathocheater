@@ -26,16 +26,12 @@ def index(request):
                 solution = answer[0]['solution']  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax  (2 November 2010)
                 digits_id = answer[0]['digits_id']  # will be used to pull statistics item
 
-                # begin code that updates counter for this already-saved Digits item
-                statistic = Statistics.objects.filter(digits=digits_id)
-                if(statistic):
-                    pass
-                else:
-                    update_digits_count = Digits.objects.get(id=digits_id)
-                    update_digits_count.counter += 1
-                    update_digits_count.save()
+                update_digits_count = Digits.objects.get(id=digits_id)
+                update_digits_count.log()
+                
             else:
-                digits = Digits(d1 = d1, d2 = d2, d3=d3, d4=d4, counter=1)
+                digits = Digits(d1 = d1, d2 = d2, d3=d3, d4=d4, counter=0)
+                digits.log()
                 answer = digits.solve()
                 solution = answer.solution
 

@@ -12,7 +12,7 @@ class Digits (models.Model):
     d2 = models.IntegerField()
     d3 = models.IntegerField()
     d4 = models.IntegerField()
-    counter = models.IntegerField()  # reserved for future use
+    counter = models.IntegerField()   # unique requests for this set of digits
 
     def __unicode__(self):
         return str(self.d1) + " " + str(self.d2) + " " + str(self.d3) + " " + str(self.d4)
@@ -64,19 +64,39 @@ class Digits (models.Model):
             if(finished):
                 break
 
-        #------------------------------------------------------------#
+        #-----------------------------------------------------------------#
         #
         #  here we need to see if the counter needs to be updated
         #  I'm thinking if it's the same IP address during the same hour,
         #  do *not* count it.
-        #  
-        #------------------------------------------------------------#
+        #
+        #-----------------------------------------------------------------#
         self.save()
         if(finished):
             answer = self.answers_set.create(solution = result_string)
         else:
             answer = self.answers_set.create(solution = 'none')
         return answer
+
+    def log(self):
+
+        # begin code that updates counter for this already-saved Digits item
+        statistic = Statistics.objects.filter(digits=self.id)
+        if(statistic):
+            statistic.counter += 1
+            statistic.save()
+        else:
+##  these aren't working, and I don't know why            
+##            ORMme = Digits.objects.get(id=self.id)
+            
+#            self.statistics_set.create(digits_id=self.id,IP='dog',counter=1)  # why do we need to specify digits_id ???  shouldn't the ORM know??
+##            ORMme.statistics_set.create(IP='dog',counter=1)  # why do we need to specify digits_id ???  shouldn't the ORM know??
+            self.counter += 1
+            self.save()
+
+
+
+    
 
     def set_parenthesis(self, p_option):
         self.paren1 = self.paren2 = self.paren3 = self.paren4 = self.paren5 = self.paren6 = ""
@@ -130,6 +150,7 @@ class Statistics (models.Model):
 
     digits = models.ForeignKey(Digits)
     IP = models.CharField(max_length=40)
+    counter = models.IntegerField()  # repeated requests for these digits from this IP address on this date
     created_on = models.DateField(auto_now = False, auto_now_add = True)
     updated_on = models.DateField(auto_now = True, auto_now_add = False)
 
