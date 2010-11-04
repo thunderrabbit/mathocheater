@@ -4,10 +4,12 @@
 
 {% block content %}
 <table>
+        <tr><td style="width:60px">digits</td><td style="width:150px">solution</td><td>counter</td></tr>
 {% for answer in answers %}
-        <tr><td style="color: blue;">{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
+        <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
 {% endfor %}
 </table>
+
 {% endblock %}
 
 {% block form %}{% endblock %}
