@@ -1,5 +1,6 @@
+from django.http import HttpResponse
 from django.db import models
-import re
+import re, datetime
 
 class Digits (models.Model):
     """Basically stores 4 digits and knows how to run through permutations of operators 
@@ -17,7 +18,7 @@ class Digits (models.Model):
     def __unicode__(self):
         return str(self.d1) + " " + str(self.d2) + " " + str(self.d3) + " " + str(self.d4)
 
-    def solve(self):
+    def solve(self,request):
         operators = ['+', '-', '*',  '/']
         parenthesis_options = ['none', 'first pair', 'second pair', 'third pair', 'both pairs', 'first three', 'last three']
 
@@ -36,12 +37,12 @@ class Digits (models.Model):
         d4 = str(self.d4) + ".0"
 
         #-------------------------------------------------------------------#
-        #
-        #  this begins a brute force process of evaluating all the possible
-        #  permutations of equations until it finds one that equals 10, or
-        #  finds none equal 10.
-        #
-        #------------------------------------------------------------------#
+        #                                                                   #
+        #  this begins a brute force process of evaluating all the possible #
+        #  permutations of equations until it finds one that equals 10, or  #
+        #  finds none equal 10.                                             #
+        #                                                                   #
+        #-------------------------------------------------------------------#
         for parenthesis_option in parenthesis_options:
             self.set_parenthesis(parenthesis_option)
             for o1 in operators:
@@ -65,24 +66,26 @@ class Digits (models.Model):
                 break
 
         self.save()
-        self.log()
+        self.log(request)
         if(finished):
             answer = self.answers_set.create(solution = result_string)
         else:
             answer = self.answers_set.create(solution = 'none')
         return answer
 
-    def log(self):
+    def log(self,request):
 
         ''' creates statistic item and  updates counter '''
         #  I'm thinking if it's the same IP address during the same date,
         #  do *not* count it.
-        statistic = Statistics.objects.filter(digits=self.id)    # should filter on IP address and date as well
+        ip_address = request.META['REMOTE_ADDR']  # request.META['HTTP_X_FORWARDED_FOR']
+        todays_date = datetime.date.today()
+        statistic = Statistics.objects.filter(digits=self.id,IP=ip_address,updated_on=todays_date)
         if(statistic):
             statistic[0].counter += 1    # this is counted as a reloaded item (ballot stuffing)
             statistic[0].save()
         else:
-            self.statistics_set.create(IP='dog',counter=1)  #  need to store the IP address
+            self.statistics_set.create(IP=ip_address,counter=1)  #  need to store the IP address
             self.counter += 1
             self.save()
 
