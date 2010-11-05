@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.shortcuts import render_to_response
 from forms import DigitsForm
 from models import Digits, Answers, Statistics
@@ -27,11 +28,11 @@ def index(request):
                 digits_id = answer[0]['digits_id']  # will be used to pull statistics item
 
                 update_digits_count = Digits.objects.get(id=digits_id)
-                update_digits_count.log()           # we didn't run solve() so must specifically log the request for these digits
+                update_digits_count.log(request)           # we didn't run solve() so must specifically log the request for these digits
                 
             else:
                 digits = Digits(d1 = d1, d2 = d2, d3=d3, d4=d4, counter=0)
-                answer = digits.solve()             # will log the request as well
+                answer = digits.solve(request)             # will log the request as well
                 solution = answer.solution
 
             if(solution != 'none'):
@@ -46,6 +47,21 @@ def index(request):
 
 
 def statistics(request):
-    answers = Answers.objects.all().order_by('-digits__counter')
+    answer_list = Answers.objects.all().order_by('-digits__counter')
+    paginator = Paginator(answer_list, 15, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    # If page request is an int, but the page DNE, go with the last page
+    try:
+        answers = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        answers = paginator.page(paginator.num_pages)
+        
+                            
     return render_to_response("statistics.html",{'answers':answers})
     

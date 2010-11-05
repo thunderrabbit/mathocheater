@@ -5,11 +5,28 @@
 {% block content %}
 <table>
         <tr><td style="width:60px">digits</td><td style="width:150px">solution</td><td>counter</td></tr>
-{% for answer in answers %}
+{% for answer in answers.object_list %}
         <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
 {% endfor %}
 </table>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if answers.has_previous %}
+            <a href="?page={{ answers.previous_page_number }}">previous</a>
+        {% endif %}
+
+	{% if answers.paginator.num_pages > 1 %}
+        <span class="current">
+            Page {{ answers.number }} of {{ answers.paginator.num_pages }}.
+        </span>
+	{% endif %}
+
+        {% if answers.has_next %}
+            <a href="?page={{ answers.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
 
 {% block form %}{% endblock %}
