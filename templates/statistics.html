@@ -4,7 +4,7 @@
 
 {% block content %}
 <table>
-        <tr><td style="width:60px">digits</td><td style="width:150px">solution</td><td>counter</td></tr>
+        <tr><td style="width:60px"><a href="?by=digits">digits</td><td style="width:150px"><a href="?by=answers">solution</a></td><td><a href="?by=counter">counter</a></td></tr>
 {% for answer in answers.object_list %}
         <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
 {% endfor %}

@@ -17,12 +17,9 @@ def index(request):
 
         incoming_form = DigitsForm({'digits':four_digits})
         if(incoming_form.is_valid() and len(four_digits) == 4):
-            d1 = request.GET['digits'][0];
-            d2 = request.GET['digits'][1];
-            d3 = request.GET['digits'][2];
-            d4 = request.GET['digits'][3];
+            digits = request.GET['digits'];
 
-            answer = Answers.objects.filter(digits__d1__exact=d1,digits__d2__exact=d2,digits__d3__exact=d3,digits__d4__exact=d4).values('solution','digits_id')
+            answer = Answers.objects.filter(digits__digits__exact = digits).values('solution','digits_id')
             if(answer):
                 solution = answer[0]['solution']  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax  (2 November 2010)
                 digits_id = answer[0]['digits_id']  # will be used to pull statistics item
@@ -31,7 +28,7 @@ def index(request):
                 update_digits_count.log(request)           # we didn't run solve() so must specifically log the request for these digits
                 
             else:
-                digits = Digits(d1 = d1, d2 = d2, d3=d3, d4=d4, counter=0)
+                digits = Digits(digits = four_digits, counter = 0)
                 answer = digits.solve(request)             # will log the request as well
                 solution = answer.solution
 
@@ -47,7 +44,15 @@ def index(request):
 
 
 def statistics(request):
-    answer_list = Answers.objects.all().order_by('-digits__counter')
+    sort_by = request.GET.get('by', 'counter')
+    sort_dir = request.GET.get('dir', 'descending')
+
+    if(sort_by not in ['digits', 'answers', 'counter']):
+        sort_by = 'counter'
+    if(sort_dir not in ['descending', 'ascending']):
+        sort_dir = 'descending'
+
+    answer_list = Answers.objects.all().order_by('-digits__' + sort_by)
     paginator = Paginator(answer_list, 15, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
 
     # Make sure page request is an int. If not, deliver first page.

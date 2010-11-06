@@ -9,14 +9,11 @@ class Digits (models.Model):
     Eventually will increment the counter each time a set of 4 digits is processed, but that's not
     written yet until I set up a table to block repeats by the same IP address in short time span."""
 
-    d1 = models.IntegerField()
-    d2 = models.IntegerField()
-    d3 = models.IntegerField()
-    d4 = models.IntegerField()
+    digits = models.CharField(max_length=4)
     counter = models.IntegerField()   # unique requests for this set of digits
 
     def __unicode__(self):
-        return str(self.d1) + " " + str(self.d2) + " " + str(self.d3) + " " + str(self.d4)
+        return self.digits
 
     def solve(self,request):
         operators = ['+', '-', '*',  '/']
@@ -31,10 +28,10 @@ class Digits (models.Model):
         result_int = 0
 
         # force floating point math by adding ".0" to end of each digit
-        d1 = str(self.d1) + ".0"
-        d2 = str(self.d2) + ".0"
-        d3 = str(self.d3) + ".0"
-        d4 = str(self.d4) + ".0"
+        d1 = self.digits[0] + ".0"
+        d2 = self.digits[1] + ".0"
+        d3 = self.digits[2] + ".0"
+        d4 = self.digits[3] + ".0"
 
         #-------------------------------------------------------------------#
         #                                                                   #
