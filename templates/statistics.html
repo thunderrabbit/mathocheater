@@ -4,7 +4,13 @@
 
 {% block content %}
 <table>
-        <tr><td style="width:60px"><a href="?by=digits">digits</td><td style="width:150px"><a href="?by=answers">solution</a></td><td><a href="?by=counter">counter</a></td></tr>
+        <tr><td style="width:60px">
+		<a href="?by=digits&dir={{ other_sort_direction }}">digits</a>
+	</td><td style="width:150px">
+		<a href="?by=answers&dir={{ other_sort_direction }}">solution</a>
+	</td><td>
+		<a href="?by=counter&dir={{ other_sort_direction }}">counter</a>
+	</td></tr>
 {% for answer in answers.object_list %}
         <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
 {% endfor %}
