@@ -126,10 +126,11 @@ class Answers (models.Model):
     digits = models.ForeignKey(Digits)
     solution = models.CharField(max_length=20)
     def __unicode__(self):
-        try:
-            response = self.solution + " = " +  str(eval(self.solution))
-        except:
+        if(self.solution == 'none'):
             response = "no solution found"
+        else:
+            float_string = re.sub(r'(\d)',r'\1.0',self.solution)                            # add .0 to digits to force floating point math
+            response = self.solution + " = " +  re.sub(r'\.0','',str(eval(float_string)))   # remove .0 from answer to make it look right
         return response
 
 class Statistics (models.Model):
