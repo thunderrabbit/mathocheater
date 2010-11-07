@@ -48,13 +48,14 @@ def statistics(request):
     sort_dir = request.GET.get('dir', 'descending')
 
     dir_dic = {'descending':'-','ascending':''}
-
+    dir_dic_keys = dir_dic.keys();
     if(sort_by not in ['digits', 'answers', 'counter']):
         sort_by = 'counter'
-    if(sort_dir not in dir_dic.keys()): 
+    if(sort_dir not in dir_dic_keys):
         sort_dir = 'descending'
 
-    other_sort_direction = dir_dic.keys().remove(sort_dir)
+    dir_dic_keys.remove(sort_dir)
+    other_sort_direction = dir_dic_keys[0]
     
     answer_list = Answers.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by)
     paginator = Paginator(answer_list, 15, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
