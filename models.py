@@ -15,11 +15,10 @@ class Digits (models.Model):
     def __unicode__(self):
         return self.digits
 
-    def solve(self,request):
+    def solve(self):
         operators = ['+', '-', '*',  '/']
         parenthesis_options = ['none', 'first pair', 'second pair', 'third pair', 'both pairs', 'first three', 'last three']
 
-        finished = 0
         operator1 = operator2 = operator3 = ""
         paren1 = paren2 = paren3 = paren4 = paren5 = paren6 = ""
 
@@ -32,6 +31,9 @@ class Digits (models.Model):
         d2 = self.digits[1] + ".0"
         d3 = self.digits[2] + ".0"
         d4 = self.digits[3] + ".0"
+
+        answers = []
+        self.save()
 
         #-------------------------------------------------------------------#
         #                                                                   #
@@ -53,22 +55,10 @@ class Digits (models.Model):
                         if(result_int == 10):
                             # remove ".0" from each number to make them whole digits
                             result_string = re.sub(r'\.0','',result_float_string)
-                            finished = 1
-                            break
-                    if(finished):
-                        break
-                if(finished):
-                    break
-            if(finished):
-                break
+                            self.answers_set.create(solution = result_string)
 
-        self.save()
-        self.log(request)
-        if(finished):
-            answer = self.answers_set.create(solution = result_string)
-        else:
-            answer = self.answers_set.create(solution = 'none')
-        return answer
+        if(not solution_found):
+            self.answers_set.create(solution = 'none')
 
     def log(self,request):
 

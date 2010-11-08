@@ -11,34 +11,27 @@ def index(request):
     
     if(request.GET.__contains__('digits')):
         four_digits = request.GET['digits']
-    
+
     if(four_digits):
         template_name = 'solved.html'
-
         incoming_form = DigitsForm({'digits':four_digits})
         if(incoming_form.is_valid() and len(four_digits) == 4):
-            digits = request.GET['digits'];
+            digits = Digits(digits = four_digits, counter = 0)
 
-            answer = Answers.objects.filter(digits__digits__exact = digits).values('solution','digits_id')
-            if(answer):
-                solution = answer[0]['solution']  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax  (2 November 2010)
-                digits_id = answer[0]['digits_id']  # will be used to pull statistics item
-
-                update_digits_count = Digits.objects.get(id=digits_id)
-                update_digits_count.log(request)           # we didn't run solve() so must specifically log the request for these digits
-                
+            answers = Answers.objects.filter(digits__digits__exact = four_digits)
+            if(answers):
+                answers[0].digits.log(request)  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax
             else:
-                digits = Digits(digits = four_digits, counter = 0)
-                answer = digits.solve(request)             # will log the request as well
-                solution = answer.solution
-
-            if(solution != 'none'):
-                solution = solution + " = " + str(eval(solution))
-            return render_to_response(template_name, {'form':empty_form, 'solution':solution})
-
+                digits.save()
+                digits.log(request)
+                digits.solve()
+                answers = Answers.objects.filter(digits__digits__exact = four_digits)
+            return render_to_response(template_name, {'form':empty_form, 'answers':answers})
         else:
+            # there was an input error
             return render_to_response(template_name, {'form':incoming_form})
     else:
+        # no digits sent
         template_name = 'index.html'
         return render_to_response(template_name, {'form':empty_form})
 
