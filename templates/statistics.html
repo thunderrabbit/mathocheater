@@ -3,18 +3,22 @@
 {% block title %}Mathoholic Solver - statistics{% endblock %}
 
 {% block content %}
-<table>
+<table borders="1">
         <tr><td style="width:60px">
 		<a href="?by=digits&dir={{ other_sort_direction }}">digits</a>
-	</td><td style="width:150px">
-		<a href="?by=answers&dir={{ other_sort_direction }}">solution</a>
 	</td><td>
-		<a href="?by=counter&dir={{ other_sort_direction }}">counter</a>
+		<a href="?by=counter&dir={{ other_sort_direction }}">count</a>
 	</td></tr>
 {% for answer in answers.object_list %}
-        <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td><td>{{ answer.digits.counter }}</td></tr>
+{% if not answer.answer %}
+        <tr><td>{{ answer.four_digits }}</td><td>{{ answer.count }}</td></tr>
+{% else %}
+        <tr><td colspan="2">{{ answer.answer }}</td></tr>
+{% endif %}
+
 {% endfor %}
 </table>
+
 
 <div class="pagination">
     <span class="step-links">

@@ -26,7 +26,10 @@ def index(request):
                 digits.log(request)
                 digits.solve()
                 answers = Answers.objects.filter(digits__digits__exact = four_digits)
-            return render_to_response(template_name, {'form':empty_form, 'answers':answers})
+
+            a = Answers()
+            output = a.beautify(answers)   # prepare for output
+            return render_to_response(template_name, {'form':empty_form, 'answers':output})
         else:
             # there was an input error
             return render_to_response(template_name, {'form':incoming_form})
@@ -43,15 +46,17 @@ def statistics(request):
     dir_dic = {'descending':'-','ascending':''}
     dir_dic_keys = dir_dic.keys();
     if(sort_by not in ['digits', 'answers', 'counter']):
-        sort_by = 'counter'
+        sort_by = 'digits'
     if(sort_dir not in dir_dic_keys):
         sort_dir = 'descending'
 
     dir_dic_keys.remove(sort_dir)
     other_sort_direction = dir_dic_keys[0]
     
-    answer_list = Answers.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by)
-    paginator = Paginator(answer_list, 15, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
+    a = Answers()
+    answer_list = Answers.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by, dir_dic[sort_dir] + 'digits__digits')    # second sort by digits simulates GROUP BY
+    output = a.beautify(answer_list)   # prepare for output
+    paginator = Paginator(output, 25, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
 
     # Make sure page request is an int. If not, deliver first page.
     try:

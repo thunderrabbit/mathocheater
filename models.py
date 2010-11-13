@@ -25,6 +25,7 @@ class Digits (models.Model):
         result_string = ""
         result_float_string = ""
         result_int = 0
+        solution_found = False
 
         # force floating point math by adding ".0" to end of each digit
         d1 = self.digits[0] + ".0"
@@ -56,6 +57,7 @@ class Digits (models.Model):
                             # remove ".0" from each number to make them whole digits
                             result_string = re.sub(r'\.0','',result_float_string)
                             self.answers_set.create(solution = result_string)
+                            solution_found = True
 
         if(not solution_found):
             self.answers_set.create(solution = 'none')
@@ -75,10 +77,6 @@ class Digits (models.Model):
             self.statistics_set.create(IP=ip_address,counter=1)  #  need to store the IP address
             self.counter += 1
             self.save()
-
-
-
-    
 
     def set_parenthesis(self, p_option):
         self.paren1 = self.paren2 = self.paren3 = self.paren4 = self.paren5 = self.paren6 = ""
@@ -122,6 +120,16 @@ class Answers (models.Model):
             float_string = re.sub(r'(\d)',r'\1.0',self.solution)                            # add .0 to digits to force floating point math
             response = self.solution + " = " +  re.sub(r'\.0','',str(eval(float_string)))   # remove .0 from answer to make it look right
         return response
+
+    def beautify(self,answers_queryset):
+        prev_digits = ""
+        output = []
+        for answer in answers_queryset:
+            if prev_digits != answer.digits.digits:
+                prev_digits = answer.digits.digits
+                output.append({'four_digits':prev_digits,'count':answer.digits.counter})
+            output.append({'answer':answer.solution})
+        return(output)
 
 class Statistics (models.Model):
     """ stores unique hits for Digits
