@@ -3,11 +3,10 @@ from django.db import models
 import re, datetime
 
 class Digits (models.Model):
-    """Basically stores 4 digits and knows how to run through permutations of operators 
-    (including parenthesis) to figure out a combination that equals 10.
-
-    Eventually will increment the counter each time a set of 4 digits is processed, but that's not
-    written yet until I set up a table to block repeats by the same IP address in short time span."""
+    """
+    Basically stores 4 digits and knows how to run through permutations of operators 
+    (including parenthesis) to find combinations that equal 10
+    """
 
     digits = models.CharField(max_length=4)
     counter = models.IntegerField()   # unique requests for this set of digits
@@ -16,6 +15,14 @@ class Digits (models.Model):
         return self.digits
 
     def solve(self):
+        """
+        Brute force through all combinations of operators and parenthesis, recording all the results that equal 10
+        simplest solutions are tried first
+
+        TODO:  discard solutions that are simply adding parenthesis
+            5 + 5 + 5 + 5 = 10  good
+           (5 + 5)+(5 + 5)= 10  don't care
+        """
         operators = ['+', '-', '*',  '/']
         parenthesis_options = ['none', 'first pair', 'second pair', 'third pair', 'both pairs', 'first three', 'last three']
 
@@ -63,8 +70,9 @@ class Digits (models.Model):
             self.answers_set.create(solution = 'none')
 
     def log(self,request):
-
-        ''' creates statistic item and  updates counter '''
+        """
+        creates statistic item and  updates counter
+        """
         #  I'm thinking if it's the same IP address during the same date,
         #  do *not* count it.
         ip_address = request.META['REMOTE_ADDR']  # request.META['HTTP_X_FORWARDED_FOR']
@@ -110,7 +118,9 @@ class Digits (models.Model):
             self.paren6 = ')'
 
 class Answers (models.Model):
-    ''' stores an answer for a set of digits or 'none' if none exists '''
+    """
+    stores an answer for a set of digits or 'none' if none exists
+    """
     digits = models.ForeignKey(Digits)
     solution = models.CharField(max_length=20)
     def __unicode__(self):
@@ -122,6 +132,9 @@ class Answers (models.Model):
         return response
 
     def beautify(self,answers_queryset):
+        """
+        process set of solutions before sending to template
+        """
         prev_digits = ""
         output = []
         for answer in answers_queryset:
@@ -132,12 +145,14 @@ class Answers (models.Model):
         return(output)
 
 class Statistics (models.Model):
-    """ stores unique hits for Digits
+    """
+    Stores unique hits for Digits
     The query is considered unique if:
     
     different Digits     OR
     different IP address OR
-    different day"""
+    different day
+    """
 
     digits = models.ForeignKey(Digits)
     IP = models.CharField(max_length=40)
