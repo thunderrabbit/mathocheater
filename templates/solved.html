@@ -8,10 +8,14 @@
             Please correct the error{{ form.errors|pluralize }} below.
         </p>
     {% else %}
-<table>
+<div class="answers">
 {% for answer in answers %}
-        <tr><td>{{ answer.digits }}</td><td>{{ answer }}</td></tr>
+{% if answer.answer %}
+        <div><span>{{ answer.answer }}</span></div>
+{% endif %}
+
 {% endfor %}
-</table>
+</div>
+
     {% endif %}
 {% endblock %}
