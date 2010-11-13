@@ -19,7 +19,7 @@ class Digits (models.Model):
         Brute force through all combinations of operators and parenthesis, recording all the results that equal 10
         simplest solutions are tried first
 
-        TODO:  discard solutions that are simply adding parenthesis
+        smooth_operators{} helps discard solutions that are simply adding parenthesis
             5 + 5 + 5 + 5 = 10  good
            (5 + 5)+(5 + 5)= 10  don't care
         """
@@ -40,7 +40,7 @@ class Digits (models.Model):
         d3 = self.digits[2] + ".0"
         d4 = self.digits[3] + ".0"
 
-        answers = []
+        smooth_operators = {}    # these operators know how to handle the digits
         self.save()
 
         #-------------------------------------------------------------------#
@@ -61,10 +61,13 @@ class Digits (models.Model):
                         except ZeroDivisionError:
                             result_int = 0
                         if(result_int == 10):
-                            # remove ".0" from each number to make them whole digits
-                            result_string = re.sub(r'\.0','',result_float_string)
-                            self.answers_set.create(solution = result_string)
-                            solution_found = True
+                            operator_cat = o1 + o2 + o3          # TODO: think of a better variable name that goes with smooth operator
+                            if(operator_cat not in smooth_operators):
+                                smooth_operators[operator_cat] = True
+                                # remove ".0" from each number to make them whole digits
+                                result_string = re.sub(r'\.0','',result_float_string)
+                                self.answers_set.create(solution = result_string)
+                                solution_found = True
 
         if(not solution_found):
             self.answers_set.create(solution = 'none')
