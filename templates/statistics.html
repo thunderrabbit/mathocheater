@@ -3,21 +3,21 @@
 {% block title %}Mathoholic Solver - statistics{% endblock %}
 
 {% block content %}
-<table borders="1">
-        <tr><td style="width:60px">
+<div class="answers">
+        <div><span style="width:60px">
 		<a href="?by=digits&dir={{ other_sort_direction }}">digits</a>
-	</td><td>
+	</span><span>
 		<a href="?by=counter&dir={{ other_sort_direction }}">count</a>
-	</td></tr>
+	</span></div>
 {% for answer in answers.object_list %}
 {% if not answer.answer %}
-        <tr><td>{{ answer.four_digits }}</td><td>{{ answer.count }}</td></tr>
+        <div><span style="font-size:220%; width:200px;">{{ answer.four_digits }}</span><span style="font-size:150%">requested {{ answer.count }} time{% if answer.count != 1 %}s{% endif %}</span></div>
 {% else %}
-        <tr><td colspan="2">{{ answer.answer }}</td></tr>
+        <div><span>{{ answer.answer }}</span></div>
 {% endif %}
 
 {% endfor %}
-</table>
+</div>
 
 
 <div class="pagination">
