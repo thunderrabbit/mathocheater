@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.shortcuts import render_to_response
 from forms import DigitsForm
-from models import Digits, Answer, Statistics
+from models import Digits, Answer, Statistics, beautify
 import datetime
 
 def index(request):
@@ -27,8 +27,7 @@ def index(request):
                 digits.solve()
                 answer = Answer.objects.filter(digits__digits__exact = four_digits)
 
-            a = Answer()
-            output = a.beautify(answer)   # prepare for output
+            output = beautify(answer)   # prepare for output
             return render_to_response(template_name, {'form':empty_form, 'answer':output})
         else:
             # there was an input error
@@ -53,9 +52,8 @@ def statistics(request):
     dir_dic_keys.remove(sort_dir)
     other_sort_direction = dir_dic_keys[0]
     
-    a = Answer()
     answer_list = Answer.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by, dir_dic[sort_dir] + 'digits__digits')    # second sort by digits simulates GROUP BY
-    output = a.beautify(answer_list)   # prepare for output
+    output = beautify(answer_list)   # prepare for output
     paginator = Paginator(output, 25, 5)  # Show 15 answer per page, at least 5 (and less than 20) on the last page
 
     # Make sure page request is an int. If not, deliver first page.

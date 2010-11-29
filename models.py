@@ -134,18 +134,19 @@ class Answer (models.Model):
             response = self.solution + " = " +  re.sub(r'\.0','',str(eval(float_string)))   # remove .0 from answer to make it look right
         return response
 
-    def beautify(self,answer_queryset):
-        """
-        process set of solutions before sending to template
-        """
-        prev_digits = ""
-        output = []
-        for answer in answer_queryset:
-            if prev_digits != answer.digits.digits:
-                prev_digits = answer.digits.digits
-                output.append({'four_digits':prev_digits,'count':answer.digits.counter})
-            output.append({'answer':answer.solution})
-        return(output)
+def beautify(answer_queryset):
+    """
+    process set of solutions before sending to template
+    """
+    prev_digits = ""
+    output = []
+    for answer in answer_queryset:
+        if prev_digits != answer.digits.digits:
+            prev_digits = answer.digits.digits
+            output.append({'four_digits':prev_digits,'count':answer.digits.counter})
+        output.append({'answer':answer.solution})
+    return(output)
+
 
 class Statistics (models.Model):
     """

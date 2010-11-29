@@ -11,7 +11,7 @@
 	</span></div>
 {% for answer in answer.object_list %}
 {% if not answer.answer %}
-        <div><span style="font-size:220%; width:200px;">{{ answer.four_digits }}</span><span style="font-size:150%">requested {{ answer.count }} time{% if answer.count != 1 %}s{% endif %}</span></div>
+        <div><span style="font-size:220%; width:200px;">{{ answer.four_digits }}</span> <span style="font-size:150%">requested {{ answer.count }} time{% if answer.count != 1 %}s{% endif %}</span></div>
 {% else %}
         <div><span>{{ answer.answer }}</span></div>
 {% endif %}
