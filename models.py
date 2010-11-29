@@ -66,11 +66,11 @@ class Digits (models.Model):
                                 smooth_operators[operator_cat] = True
                                 # remove ".0" from each number to make them whole digits
                                 result_string = re.sub(r'\.0','',result_float_string)
-                                self.answers_set.create(solution = result_string)
+                                self.answer_set.create(solution = result_string)
                                 solution_found = True
 
         if(not solution_found):
-            self.answers_set.create(solution = 'none')
+            self.answer_set.create(solution = 'none')
 
     def log(self,request):
         """
@@ -120,7 +120,7 @@ class Digits (models.Model):
             self.paren2 = '('
             self.paren6 = ')'
 
-class Answers (models.Model):
+class Answer (models.Model):
     """
     stores an answer for a set of digits or 'none' if none exists
     """
@@ -134,13 +134,13 @@ class Answers (models.Model):
             response = self.solution + " = " +  re.sub(r'\.0','',str(eval(float_string)))   # remove .0 from answer to make it look right
         return response
 
-    def beautify(self,answers_queryset):
+    def beautify(self,answer_queryset):
         """
         process set of solutions before sending to template
         """
         prev_digits = ""
         output = []
-        for answer in answers_queryset:
+        for answer in answer_queryset:
             if prev_digits != answer.digits.digits:
                 prev_digits = answer.digits.digits
                 output.append({'four_digits':prev_digits,'count':answer.digits.counter})

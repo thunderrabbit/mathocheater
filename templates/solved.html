@@ -8,8 +8,8 @@
             Please correct the error{{ form.errors|pluralize }} below.
         </p>
     {% else %}
-<div class="answers">
-{% for answer in answers %}
+<div class="answer">
+{% for answer in answer %}
 {% if answer.answer %}
         <div><span>{{ answer.answer }}</span></div>
 {% endif %}

@@ -1,5 +1,5 @@
-from models import Digits, Answers
+from models import Digits, Answer
 from django.contrib import admin
 
 admin.site.register(Digits)
-admin.site.register(Answers)
+admin.site.register(Answer)

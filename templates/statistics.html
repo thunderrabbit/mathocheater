@@ -3,13 +3,13 @@
 {% block title %}Mathoholic Solver - statistics{% endblock %}
 
 {% block content %}
-<div class="answers">
+<div class="answer">
         <div><span style="width:60px">
 		<a href="?by=digits&dir={{ other_sort_direction }}">digits</a>
 	</span><span>
 		<a href="?by=counter&dir={{ other_sort_direction }}">count</a>
 	</span></div>
-{% for answer in answers.object_list %}
+{% for answer in answer.object_list %}
 {% if not answer.answer %}
         <div><span style="font-size:220%; width:200px;">{{ answer.four_digits }}</span><span style="font-size:150%">requested {{ answer.count }} time{% if answer.count != 1 %}s{% endif %}</span></div>
 {% else %}
@@ -22,18 +22,18 @@
 
 <div class="pagination">
     <span class="step-links">
-        {% if answers.has_previous %}
-            <a href="?page={{ answers.previous_page_number }}">previous</a>
+        {% if answer.has_previous %}
+            <a href="?page={{ answer.previous_page_number }}">previous</a>
         {% endif %}
 
-	{% if answers.paginator.num_pages > 1 %}
+	{% if answer.paginator.num_pages > 1 %}
         <span class="current">
-            Page {{ answers.number }} of {{ answers.paginator.num_pages }}.
+            Page {{ answer.number }} of {{ answer.paginator.num_pages }}.
         </span>
 	{% endif %}
 
-        {% if answers.has_next %}
-            <a href="?page={{ answers.next_page_number }}">next</a>
+        {% if answer.has_next %}
+            <a href="?page={{ answer.next_page_number }}">next</a>
         {% endif %}
     </span>
 </div>

@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.shortcuts import render_to_response
 from forms import DigitsForm
-from models import Digits, Answers, Statistics
+from models import Digits, Answer, Statistics
 import datetime
 
 def index(request):
@@ -18,18 +18,18 @@ def index(request):
         if(incoming_form.is_valid() and len(four_digits) == 4):
             digits = Digits(digits = four_digits, counter = 0)
 
-            answers = Answers.objects.filter(digits__digits__exact = four_digits)
-            if(answers):
-                answers[0].digits.log(request)  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax
+            answer = Answer.objects.filter(digits__digits__exact = four_digits)
+            if(answer):
+                answer[0].digits.log(request)  # thanks to Denis G./M/Volgograd,RussianFederation for this syntax
             else:
                 digits.save()
                 digits.log(request)
                 digits.solve()
-                answers = Answers.objects.filter(digits__digits__exact = four_digits)
+                answer = Answer.objects.filter(digits__digits__exact = four_digits)
 
-            a = Answers()
-            output = a.beautify(answers)   # prepare for output
-            return render_to_response(template_name, {'form':empty_form, 'answers':output})
+            a = Answer()
+            output = a.beautify(answer)   # prepare for output
+            return render_to_response(template_name, {'form':empty_form, 'answer':output})
         else:
             # there was an input error
             return render_to_response(template_name, {'form':incoming_form})
@@ -45,7 +45,7 @@ def statistics(request):
 
     dir_dic = {'descending':'-','ascending':''}
     dir_dic_keys = dir_dic.keys();
-    if(sort_by not in ['digits', 'answers', 'counter']):
+    if(sort_by not in ['digits', 'answer', 'counter']):
         sort_by = 'digits'
     if(sort_dir not in dir_dic_keys):
         sort_dir = 'descending'
@@ -53,10 +53,10 @@ def statistics(request):
     dir_dic_keys.remove(sort_dir)
     other_sort_direction = dir_dic_keys[0]
     
-    a = Answers()
-    answer_list = Answers.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by, dir_dic[sort_dir] + 'digits__digits')    # second sort by digits simulates GROUP BY
+    a = Answer()
+    answer_list = Answer.objects.all().order_by(dir_dic[sort_dir] + 'digits__' + sort_by, dir_dic[sort_dir] + 'digits__digits')    # second sort by digits simulates GROUP BY
     output = a.beautify(answer_list)   # prepare for output
-    paginator = Paginator(output, 25, 5)  # Show 15 answers per page, at least 5 (and less than 20) on the last page
+    paginator = Paginator(output, 25, 5)  # Show 15 answer per page, at least 5 (and less than 20) on the last page
 
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -66,10 +66,10 @@ def statistics(request):
 
     # If page request is an int, but the page DNE, go with the last page
     try:
-        answers = paginator.page(page)
+        answer = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        answers = paginator.page(paginator.num_pages)
+        answer = paginator.page(paginator.num_pages)
         
                             
-    return render_to_response("statistics.html",{'answers':answers,'other_sort_direction':other_sort_direction})
+    return render_to_response("statistics.html",{'answer':answer,'other_sort_direction':other_sort_direction})
     
